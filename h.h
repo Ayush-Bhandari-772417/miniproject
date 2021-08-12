@@ -61,15 +61,54 @@ typedef struct library{
 
 /************** FUNCTION DECLARATION ****************/
 
+/*
+    * this is for registering a new student
+    * addStudent() : it takes care of reading the new student information and adding the record to the file
+    * first inputStudentDetails() takes the student details
+    * the student is passed to addStudentToFile() 
+    * then a student registration is completed 
+*/
 void addStudent();
 Student inputStudentDetails();
 void addStudentToFile(Student s);
 
+/*
+    * this is for registering a new admin
+    * addAdmin() : it takes care of reading the new admin information and adding the record to the file
+    * first inputAdminDetails() takes the admin details
+    * the admin is passed to addAdminToFile() 
+    * then a admin registration is completed 
+*/
 void addAdmin();
 Admin inputAdminDetails();
 void addAdminToFile(Admin a);
 
+/*
+    * this is for adding a new book
+    * addBook() : it takes care of reading the new book information and adding the record to the file
+    * first inputBookDetails() takes the admin details
+    * the admin is passed to addBookToFile() 
+    * then a new book is added 
+*/
 void addBook();
 Book inputBookDetails();
 void addBookToFile(Book b);
 
+
+/************* ADMIN ONLY FUNCTIONS **************/
+/*
+    * these functions are to be used by the admin
+    * these functions will be called from the admin module only
+*/
+void getAllStudents();
+void getAllBooks();
+void getAllAdmins();
+
+
+/** SEARCH BY FUNCTIONALITY FOR BOOK SEARCH **/
+/*
+    * using search by id and title for now for simplicity 
+    * other search parameters can be added later
+*/
+void searchBookById(int bId);
+void searchBookByTitle(char *title);
