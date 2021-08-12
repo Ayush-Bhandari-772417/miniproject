@@ -28,23 +28,46 @@ int main(int argc, char const *argv[])
 }
 
 
-/*************************/
-// void addStudent()
-// {
-//     Student s = inputStudentDetails();
-//     addStudentToFile(s);
-// }
-// void addAdmin()
-// {
-//     Admin a = inputAdminDetails();
-//     addAdminToFile(a);
-// }
+/*********** FUNCTION TO ADD NEW RECORD **************/
+//Add a new student
+void addStudent()
+{
+    Student s = inputStudentDetails();
+    addStudentToFile(s);
+}
+//Add a new admin
+void addAdmin()
+{
+    Admin a = inputAdminDetails();
+    addAdminToFile(a);
+}
 
-// void addBook()
-// {
-//     Book b = inputBookDetails();
-//     addBookToFile(b);
-// }
+//Add a new book
+void addBook()
+{
+    Book b = inputBookDetails();
+    addBookToFile(b);
+}
+
+/***************** FUNCTION TO READ NEW RECORD DETAILS *******************/
+Student inputStudentDetails(){
+    Student s;
+    /* your code to read the new student details */
+    return s;
+}
+
+Admin inputAdminDetails(){
+    Admin a;
+    /* your code to read the new admin details */
+    return a;
+}
+
+Book inputBookDetails(){
+    Book b;
+    /* your code to read the details of the new book */
+    return b;
+}
+
 
 
 /**************** FUNCTIONS FOR FILE HANDLING *******************/
@@ -53,7 +76,7 @@ int main(int argc, char const *argv[])
 void addStudentToFile(Student s)
 {
     FILE *studentFile;
-    studentFile = fopen("student.bin", "ab"); //adding data to the existing file : appending
+    studentFile = fopen("files\\student.bin", "ab"); //adding data to the existing file : appending
     if (studentFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -70,7 +93,7 @@ void addStudentToFile(Student s)
 }
 void addAdminToFile(Admin a){
     FILE *adminFile;
-    adminFile=fopen("admin.bin","ab");
+    adminFile=fopen("files\\admin.bin","ab");
     if (adminFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -87,7 +110,7 @@ void addAdminToFile(Admin a){
 }
 void addBookToFile(Book b){
     FILE *bookFile;
-    bookFile=fopen("admin.bin","ab");
+    bookFile=fopen("files\\book.bin","ab");
     if (bookFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -102,6 +125,7 @@ void addBookToFile(Book b){
         perror("\nError while adding book!\n");
     fclose(bookFile);
 }
+
 
 /** READING FROM FILES **/
 void getAllStudents(){
@@ -160,3 +184,13 @@ void getAllBooks(){
 }
 
 
+
+
+/** BOOK SEARCH FUNCTIONS **/
+/*
+    * get search parameter form the user 
+    * search for the book info in the book.bin file
+    * get the book id and search the library information of the book in library.bin 
+*/
+void searchBookById(int bId){}
+void searchBookByTitle(char *bookTitle){}
