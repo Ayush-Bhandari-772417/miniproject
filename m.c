@@ -43,19 +43,38 @@ void addBook()
 {
     Book b = inputBookDetails();
     addBookToFile(b);
+    /*update the status to the library*/
+    LibraryBook lb = makeNewLibraryBook(b);
+    addToLibraryFile(lb);
 }
 
 void issueBook()
 {
     Issue i = inputIssueDetails();
     issueBookToFile(i);
+    /*update the book status to the library*/
+    LibraryBook lb = makeLibraryBook(i, ISSUE);
+    updateLibraryFile(lb);
+
+    /*update the student account*/
+    Student s = makeStudentDetails(i, ISSUE);
+    updateStudentFile(s);
 }
 
 void returnBook()
 {
     Issue i = checkReturnConditions();
     returnBookToFile(i);
+    /*update the book status to the library*/
+    LibraryBook lb = makeLibraryBook(i, RETURN);
+    updateLibraryFile(lb);
+
+    /*update the student account*/
+    Student s = makeStudentDetails(i, ISSUE);
+    updateStudentFile(s);
 }
+
+
 
 /***************** FUNCTION TO READ NEW RECORD DETAILS *******************/
 Student inputStudentDetails()
@@ -150,7 +169,6 @@ void addBookToFile(Book b)
         perror("\nError while adding book!\n");
     fclose(bookFile);
 }
-
 void issueBooktoFile(Issue i)
 {
     FILE *issueFile;
@@ -169,7 +187,6 @@ void issueBooktoFile(Issue i)
         perror("\nError while adding book!\n");
     fclose(issueFile);
 }
-
 void returnBookToFile(Issue i)
 {
     FILE *issueFile, *temp;
@@ -216,6 +233,73 @@ void returnBookToFile(Issue i)
         printf("Error: unable to rename the file");
     }
     fclose(issueFile);
+}
+
+void addToLibraryFile(LibraryBook lb)
+{
+    FILE *libraryFile;
+    libraryFile = fopen("files\\library.bin", "ab"); //adding data to the existing file : appending
+    if (libraryFile == NULL)
+    {
+        perror("\nError opening the file.\n");
+        exit(1); //check this later again
+    }
+    fwrite(&lb, sizeof(LibraryBook), 1, libraryFile);
+    if (fwrite != 0)
+    {
+        printf("\nStudent added successfully!\n");
+    }
+    else
+        perror("\nError while adding student!\n");
+    fclose(libraryFile);
+}
+void updateLibraryFile(LibraryBook lb)
+{
+
+    FILE *libraryFile, *temp;
+    libraryFile = fopen("files\\library.bin", "rb");
+    temp = fopen("files\\temp.bin", "wb");
+    LibraryBook ri;
+
+    if (libraryFile == NULL || temp == NULL)
+    {
+        perror("\nError opening the file.\n");
+        exit(1); //check this later again
+    }
+
+    while (fread(&ri, sizeof(LibraryBook), 1, libraryFile))
+    {
+        if (ri.bId == lb.bId)
+        {
+            fwrite(&lb, sizeof(LibraryBook), 1, libraryFile);
+        }
+        else
+        {
+            fwrite(&ri, sizeof(LibraryBook), 1, libraryFile);
+        }
+    }
+
+    int ret = remove("files\\library.bin");
+
+    if (ret == 0)
+    {
+        printf("File deleted successfully");
+    }
+    else
+    {
+        printf("Error: unable to delete the file");
+    }
+
+    ret = rename("files\\temp.bin", "files\\library.bin");
+    if (ret == 0)
+    {
+        printf("File renamed successfully");
+    }
+    else
+    {
+        printf("Error: unable to rename the file");
+    }
+    fclose(libraryFile);
 }
 
 /** READING FROM FILES **/
@@ -323,6 +407,95 @@ void getAllCurrentIssues()
     }
     fclose(issueFile);
 }
+
+/***********************/
+
+LibraryBook makeNewLibraryBook(Book b)
+{
+    LibraryBook lb = {
+        .bId = b.id,
+        .qty = b.qty,
+        .in = b.qty,
+        .out = b.qty};
+    return lb;
+}
+
+LibraryBook makeLibraryBook(Issue i, int libraryTask)
+{
+    FILE *libraryFile;
+    LibraryBook lb;
+
+    //open library.bin file for reading
+    libraryFile = fopen("library.bin", "rb");
+    if (libraryFile == NULL)
+    {
+        perror("\nError opening the file.\n");
+        exit(1);
+    }
+
+    // read file content till the end of file
+    while (fread(&lb, sizeof(Student), 1, libraryFile))
+    {
+        if (i.bId == lb.bId)
+            break; //we look for the book id of the book being issued in the library and store the matched info into lb
+    }
+    fclose(libraryFile);
+    //we have the data filled into lb from library
+    //now we update the info according to the libraryTask
+    switch (libraryTask)
+    {
+    case ISSUE:
+        --lb.in;
+        ++lb.out;
+        break;
+    case RETURN:
+        ++lb.in;
+        --lb.out;
+        break;
+    default:
+        perror("ERROR!!!");
+        break;
+    }
+    return lb;
+}
+
+Student makeStudentDetails(Issue i, int libraryTask){
+    FILE *studentFile;
+    Student s;
+
+    //open student.bin file for reading
+    studentFile = fopen("student.bin", "rb");
+    if (studentFile == NULL)
+    {
+        perror("\nError opening the file.\n");
+        exit(1);
+    }
+
+    // read file content till the end of file
+    while (fread(&s, sizeof(Student), 1, studentFile))
+    {
+        if (i.uId == s.id)
+            break; //we look for the book id of the book being issued in the library and store the matched info into lb
+    }
+    fclose(studentFile);
+    //we have the data filled into lb from library
+    //now we update the info according to the libraryTask
+    switch (libraryTask)
+    {
+    case ISSUE:
+        --s.quota;
+        break;
+    case RETURN:
+        ++lb.in;
+        --lb.out;
+        break;
+    default:
+        perror("ERROR!!!");
+        break;
+    }
+    return lb;
+}
+/***********************/
 
 /** BOOK SEARCH FUNCTIONS **/
 /*

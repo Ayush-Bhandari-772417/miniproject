@@ -15,6 +15,9 @@ enum bookStatus{
     IN,OUT
 };
 
+enum libraryTask{
+    ISSUE, RETURN
+};
 
 /****************** STRUCTURE CREATION *********************/
 //a user is a registered memeber of the library
@@ -26,6 +29,8 @@ typedef struct user{
     int quota;
 }Student;
 
+
+//this may not be used
 typedef struct studentAccount{
     int uId;
     int bId;
@@ -55,7 +60,7 @@ typedef struct library{
     int qty;//total number of books
     int in;//number of books in
     int out;//number of books out
-}Library;
+}LibraryBook;
 
 
 typedef struct issue{
@@ -79,6 +84,10 @@ typedef struct issue{
 void addStudent();
 Student inputStudentDetails();
 void addStudentToFile(Student s);
+
+Student makeStudentDetails(Issue i, int libraryTask);
+void updateStudentFile(Student s);
+
 
 /*
     * this is for registering a new admin
@@ -108,15 +117,22 @@ void addBookToFile(Book b);
     * while returning the book the existing issue will be updated
 */
 void issueBook();
-void inputIssueDetails();
+Issue inputIssueDetails();
 void issueBookToFile(Issue i);
 
 void returnBook();
 Issue checkReturnConditions();
 void returnBookToFile(Issue i);
 
-
-
+/*
+    * updating the book status in the library file after issue and return
+    * change book status to out, 
+    * change student account , decrease student quota
+*/
+LibraryBook makeNewLibraryBook(Book b);
+LibraryBook makeLibraryBook(Issue i,int libraryTask);
+void addToLibraryFile(LibraryBook lb);
+void updateLibraryFile(LibraryBook lb);
 
 /************* ADMIN ONLY FUNCTIONS **************/
 /*
