@@ -58,6 +58,14 @@ typedef struct library{
 }Library;
 
 
+typedef struct issue{
+    int iId;//issue id
+    int uId;//issuer/user or student id
+    int bId;//issued book id
+    char issueDate[10];
+    char returnDate[10];
+    char returnedDate[10];
+}Issue;
 
 /************** FUNCTION DECLARATION ****************/
 
@@ -104,6 +112,15 @@ void getAllStudents();
 void getAllBooks();
 void getAllAdmins();
 
+/***************** BOOK ISSUE AND RETURN FUNCTIONS *****************/
+/*
+    * these functions are for storing the information about the book issued and returned
+    * new issue will be created when a book is issued 
+    * while returning the book the existing issue will be updated
+*/
+void getAllCurrentIssues();//for books not returned
+void issueBook(int iId,int uId, int bId);
+void returnBook(int iId,int uId, int bId);
 
 /** SEARCH BY FUNCTIONALITY FOR BOOK SEARCH **/
 /*
