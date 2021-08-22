@@ -102,6 +102,21 @@ void addBook();
 Book inputBookDetails();
 void addBookToFile(Book b);
 
+/*
+    * these functions are for storing the information about the book issued and returned
+    * new issue will be created when a book is issued 
+    * while returning the book the existing issue will be updated
+*/
+void issueBook();
+void inputIssueDetails();
+void issueBookToFile(Issue i);
+
+void returnBook();
+Issue checkReturnConditions();
+void returnBookToFile(Issue i);
+
+
+
 
 /************* ADMIN ONLY FUNCTIONS **************/
 /*
@@ -111,16 +126,9 @@ void addBookToFile(Book b);
 void getAllStudents();
 void getAllBooks();
 void getAllAdmins();
+void getAllIssues();
+void getAllCurrentIssues();
 
-/***************** BOOK ISSUE AND RETURN FUNCTIONS *****************/
-/*
-    * these functions are for storing the information about the book issued and returned
-    * new issue will be created when a book is issued 
-    * while returning the book the existing issue will be updated
-*/
-void getAllCurrentIssues();//for books not returned
-void issueBook(int iId,int uId, int bId);
-void returnBook(int iId,int uId, int bId);
 
 /** SEARCH BY FUNCTIONALITY FOR BOOK SEARCH **/
 /*
