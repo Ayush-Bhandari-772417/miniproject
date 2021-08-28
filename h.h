@@ -12,7 +12,7 @@ enum bookCondition{
 };
 
 enum bookStatus{
-    IN,OUT
+    IN , OUT
 };
 
 enum libraryTask{
@@ -123,6 +123,12 @@ void issueBookToFile(Issue i);
 void returnBook();
 Issue checkReturnConditions();
 void returnBookToFile(Issue i);
+
+/***  MORE FUNCTIONS FOR BOOKS  ****/
+void updateBookInfo();
+void deleteBookInfo();
+void updateBookDetailsToFile(Book b);
+void deleteBookDetailsFromFile(Book b);
 
 /*
     * updating the book status in the library file after issue and return

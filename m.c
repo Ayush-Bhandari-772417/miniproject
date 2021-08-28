@@ -74,7 +74,17 @@ void returnBook()
     updateStudentFile(s);
 }
 
+void updateBookInfo(){
+    Book b;
+    //get the new info about the book being updated
+    updateBookDetailsToFile(b);
+}
 
+void deleteBookInfo(){
+    Book b;
+    // get the information about the book being deleted
+    deleteBookDetailsFromFile(b);
+}
 
 /***************** FUNCTION TO READ NEW RECORD DETAILS *******************/
 Student inputStudentDetails()
@@ -169,7 +179,7 @@ void addBookToFile(Book b)
         perror("\nError while adding book!\n");
     fclose(bookFile);
 }
-void issueBooktoFile(Issue i)
+void issueBookToFile(Issue i)
 {
     FILE *issueFile;
     issueFile = fopen("files\\issue.bin", "ab");
@@ -302,6 +312,146 @@ void updateLibraryFile(LibraryBook lb)
     fclose(libraryFile);
 }
 
+void updateStudentFile(Student s){
+    FILE *studentFile, *temp;
+    studentFile = fopen("files\\student.bin", "rb");
+    temp = fopen("files\\temp.bin", "wb");
+    Student st;
+
+    if (studentFile == NULL || temp == NULL)
+    {
+        perror("\nError opening the file.\n");
+        exit(1); //check this later again
+    }
+
+    while (fread(&st, sizeof(Student), 1, studentFile))
+    {
+        if (st.id == s.id)
+        {
+            fwrite(&s, sizeof(Student), 1, studentFile);
+        }
+        else
+        {
+            fwrite(&st, sizeof(Student), 1, studentFile);
+        }
+    }
+
+    int ret = remove("files\\student.bin");
+
+    if (ret == 0)
+    {
+        printf("File deleted successfully");
+    }
+    else
+    {
+        printf("Error: unable to delete the file");
+    }
+
+    ret = rename("files\\temp.bin", "files\\student.bin");
+    if (ret == 0)
+    {
+        printf("File renamed successfully");
+    }
+    else
+    {
+        printf("Error: unable to rename the file");
+    }
+    fclose(studentFile);
+}
+
+void updateBookDetailsToFile(Book b){
+    //replacing
+    FILE *bookFile, *temp;
+    bookFile = fopen("files\\book.bin", "rb");
+    temp = fopen("files\\temp.bin", "wb");
+    Book ri;
+
+    if (bookFile == NULL || temp == NULL)
+    {
+        perror("\nError opening the file.\n");
+        exit(1); //check this later again
+    }
+
+    while (fread(&ri, sizeof(Book), 1, bookFile))
+    {
+        if (ri.id == b.id)
+        {
+            fwrite(&b, sizeof(Book), 1, bookFile);
+        }
+        else
+        {
+            fwrite(&ri, sizeof(Book), 1, bookFile);
+        }
+    }
+
+    int ret = remove("files\\book.bin");
+
+    if (ret == 0)
+    {
+        printf("File deleted successfully");
+    }
+    else
+    {
+        printf("Error: unable to delete the file");
+    }
+
+    ret = rename("files\\temp.bin", "files\\book.bin");
+    if (ret == 0)
+    {
+        printf("File renamed successfully");
+    }
+    else
+    {
+        printf("Error: unable to rename the file");
+    }
+    fclose(bookFile);
+}
+
+void deleteBookDetailsFromFile(Book b){
+    //removing
+    FILE *bookFile, *temp;
+    bookFile = fopen("files\\book.bin", "rb");
+    temp = fopen("files\\temp.bin", "wb");
+    Book ri;
+
+    if (bookFile == NULL || temp == NULL)
+    {
+        perror("\nError opening the file.\n");
+        exit(1); //check this later again
+    }
+
+    while (fread(&ri, sizeof(Book), 1, bookFile))
+    {
+        if (ri.id != b.id)
+        {
+            fwrite(&ri, sizeof(Book), 1, bookFile);
+        }
+    }
+
+    int ret = remove("files\\book.bin");
+
+    if (ret == 0)
+    {
+        printf("File deleted successfully");
+    }
+    else
+    {
+        printf("Error: unable to delete the file");
+    }
+
+    ret = rename("files\\temp.bin", "files\\book.bin");
+    if (ret == 0)
+    {
+        printf("File renamed successfully");
+    }
+    else
+    {
+        printf("Error: unable to rename the file");
+    }
+    fclose(bookFile);
+
+}
+
 /** READING FROM FILES **/
 void getAllStudents()
 {
@@ -309,7 +459,7 @@ void getAllStudents()
     Student s;
 
     //open student.bin file for reading
-    studentFile = fopen("student.bin", "rb");
+    studentFile = fopen("files/student.bin", "rb");
     if (studentFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -329,7 +479,7 @@ void getAllAdmins()
     Admin a;
 
     //open admin.bin file for reading
-    adminFile = fopen("admin.bin", "rb");
+    adminFile = fopen("files/admin.bin", "rb");
     if (adminFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -349,7 +499,7 @@ void getAllBooks()
     Book b;
 
     //open book.bin file for reading
-    bookFile = fopen("book.bin", "rb");
+    bookFile = fopen("files/book.bin", "rb");
     if (bookFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -369,7 +519,7 @@ void getAllIssues()
     Issue i;
 
     //open issue.bin file for reading
-    issueFile = fopen("issue.bin", "rb");
+    issueFile = fopen("files/issue.bin", "rb");
     if (issueFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -390,7 +540,7 @@ void getAllCurrentIssues()
     Issue i;
 
     //open issue.bin file for reading
-    issueFile = fopen("issue.bin", "rb");
+    issueFile = fopen("files/issue.bin", "rb");
     if (issueFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -475,10 +625,10 @@ Student makeStudentDetails(Issue i, int libraryTask){
     while (fread(&s, sizeof(Student), 1, studentFile))
     {
         if (i.uId == s.id)
-            break; //we look for the book id of the book being issued in the library and store the matched info into lb
+            break; //we look for the id of the issuee in the student file and store the matched info into s
     }
     fclose(studentFile);
-    //we have the data filled into lb from library
+    //we have the data filled into s from student.bin
     //now we update the info according to the libraryTask
     switch (libraryTask)
     {
@@ -486,14 +636,13 @@ Student makeStudentDetails(Issue i, int libraryTask){
         --s.quota;
         break;
     case RETURN:
-        ++lb.in;
-        --lb.out;
+        ++s.quota;
         break;
     default:
         perror("ERROR!!!");
         break;
     }
-    return lb;
+    return s;
 }
 /***********************/
 
