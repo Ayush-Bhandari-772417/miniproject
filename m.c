@@ -5,24 +5,24 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include "h.h"
+//#include "h.h"
 
-int main(int argc, char const *argv[])
-{
-    printf("Working ...");
-    perror("Error.");
-    Student s = {
-        .id = 1};
-    Admin a = {
-        .id = 2};
-    Book b = {
-        .id = 3};
-    addStudentToFile(s);
-    addAdminToFile(a);
-    addBookToFile(b);
-    getAllStudents();
-    return 0;
-}
+// int main(int argc, char const *argv[])
+// {
+//     printf("Working ...");
+//     perror("Error.");
+//     Student s = {
+//         .id = 1};
+//     Admin a = {
+//         .id = 2};
+//     Book b = {
+//         .id = 3};
+//     addStudentToFile(s);
+//     addAdminToFile(a);
+//     addBookToFile(b);
+//     getAllStudents();
+//     return 0;
+// }
 
 /*********** FUNCTION TO ADD NEW RECORD **************/
 //Add a new student
@@ -53,11 +53,11 @@ void issueBook()
     Issue i = inputIssueDetails();
     issueBookToFile(i);
     /*update the book status to the library*/
-    LibraryBook lb = makeLibraryBook(i, ISSUE);
+    LibraryBook lb = makeLibraryBook(i, LISSUE);
     updateLibraryFile(lb);
 
     /*update the student account*/
-    Student s = makeStudentDetails(i, ISSUE);
+    Student s = makeStudentDetails(i, LISSUE);
     updateStudentFile(s);
 }
 
@@ -66,23 +66,35 @@ void returnBook()
     Issue i = checkReturnConditions();
     returnBookToFile(i);
     /*update the book status to the library*/
-    LibraryBook lb = makeLibraryBook(i, RETURN);
+    LibraryBook lb = makeLibraryBook(i, LRETURN);
     updateLibraryFile(lb);
 
     /*update the student account*/
-    Student s = makeStudentDetails(i, ISSUE);
+    Student s = makeStudentDetails(i, LISSUE);
     updateStudentFile(s);
 }
 
-void updateBookInfo(){
+void updateBookInfo()
+{
     Book b;
     //get the new info about the book being updated
+    //need to decide weither to show the old data or not
+    //first show the old details
+    int id = inputBookId(LUPDATE);
+    b = getBookInfo(id);
+    //display or no the details of this book
+    //then input the new details of the book
+    b = inputBookDetails();
     updateBookDetailsToFile(b);
 }
 
-void deleteBookInfo(){
+void deleteBookInfo()
+{
     Book b;
     // get the information about the book being deleted
+    int id = inputBookId(LDELETE);
+    b = getBookInfo(id);
+    //then display or not the details of the book
     deleteBookDetailsFromFile(b);
 }
 
@@ -105,6 +117,7 @@ Book inputBookDetails()
 {
     Book b;
     /* your code to read the details of the new book */
+    printf("\nWe will input the book details here.");
     return b;
 }
 
@@ -112,6 +125,7 @@ Issue inputIssueDetails()
 {
     Issue i;
     /* read details of the issue and do validation*/
+    printf("\nWe will input the details for issue and validate here.");
     return i;
 }
 
@@ -119,6 +133,7 @@ Issue checkReturnConditions()
 {
     Issue i;
     /*do all the return condition validation*/
+    printf("\nHere is the validations while returning the book.");
     return i;
 }
 
@@ -128,7 +143,7 @@ Issue checkReturnConditions()
 void addStudentToFile(Student s)
 {
     FILE *studentFile;
-    studentFile = fopen("files\\student.bin", "ab"); //adding data to the existing file : appending
+    studentFile = fopen("files/student.bin", "ab"); //adding data to the existing file : appending
     if (studentFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -146,7 +161,7 @@ void addStudentToFile(Student s)
 void addAdminToFile(Admin a)
 {
     FILE *adminFile;
-    adminFile = fopen("files\\admin.bin", "ab");
+    adminFile = fopen("files/admin.bin", "ab");
     if (adminFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -164,7 +179,7 @@ void addAdminToFile(Admin a)
 void addBookToFile(Book b)
 {
     FILE *bookFile;
-    bookFile = fopen("files\\book.bin", "ab");
+    bookFile = fopen("files/book.bin", "ab");
     if (bookFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -182,7 +197,7 @@ void addBookToFile(Book b)
 void issueBookToFile(Issue i)
 {
     FILE *issueFile;
-    issueFile = fopen("files\\issue.bin", "ab");
+    issueFile = fopen("files/issue.bin", "ab");
     if (issueFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -191,7 +206,7 @@ void issueBookToFile(Issue i)
     fwrite(&i, sizeof(Issue), 1, issueFile);
     if (fwrite != 0)
     {
-        printf("\nBook added successfully!\n");
+        printf("\nBook issued successfully!\n");
     }
     else
         perror("\nError while adding book!\n");
@@ -200,8 +215,8 @@ void issueBookToFile(Issue i)
 void returnBookToFile(Issue i)
 {
     FILE *issueFile, *temp;
-    issueFile = fopen("files\\issue.bin", "rb");
-    temp = fopen("files\\temp.bin", "wb");
+    issueFile = fopen("files/issue.bin", "rb");
+    temp = fopen("files/temp.bin", "wb");
     Issue ri;
 
     if (issueFile == NULL || temp == NULL)
@@ -222,7 +237,9 @@ void returnBookToFile(Issue i)
         }
     }
 
-    int ret = remove("files\\issue.bin");
+    fclose(issueFile);
+    fclose(temp);
+    int ret = remove("files/issue.bin");
 
     if (ret == 0)
     {
@@ -233,7 +250,7 @@ void returnBookToFile(Issue i)
         printf("Error: unable to delete the file");
     }
 
-    ret = rename("files\\temp.bin", "files\\issue.bin");
+    ret = rename("files/temp.bin", "files/issue.bin");
     if (ret == 0)
     {
         printf("File renamed successfully");
@@ -242,13 +259,12 @@ void returnBookToFile(Issue i)
     {
         printf("Error: unable to rename the file");
     }
-    fclose(issueFile);
 }
 
 void addToLibraryFile(LibraryBook lb)
 {
     FILE *libraryFile;
-    libraryFile = fopen("files\\library.bin", "ab"); //adding data to the existing file : appending
+    libraryFile = fopen("files/library.bin", "ab"); //adding data to the existing file : appending
     if (libraryFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -257,7 +273,7 @@ void addToLibraryFile(LibraryBook lb)
     fwrite(&lb, sizeof(LibraryBook), 1, libraryFile);
     if (fwrite != 0)
     {
-        printf("\nStudent added successfully!\n");
+        printf("\nBook added to Library successfully!\n");
     }
     else
         perror("\nError while adding student!\n");
@@ -267,8 +283,8 @@ void updateLibraryFile(LibraryBook lb)
 {
 
     FILE *libraryFile, *temp;
-    libraryFile = fopen("files\\library.bin", "rb");
-    temp = fopen("files\\temp.bin", "wb");
+    libraryFile = fopen("files/library.bin", "rb");
+    temp = fopen("files/temp.bin", "wb");
     LibraryBook ri;
 
     if (libraryFile == NULL || temp == NULL)
@@ -289,7 +305,9 @@ void updateLibraryFile(LibraryBook lb)
         }
     }
 
-    int ret = remove("files\\library.bin");
+    fclose(libraryFile);
+    fclose(temp);
+    int ret = remove("files/library.bin");
 
     if (ret == 0)
     {
@@ -300,7 +318,7 @@ void updateLibraryFile(LibraryBook lb)
         printf("Error: unable to delete the file");
     }
 
-    ret = rename("files\\temp.bin", "files\\library.bin");
+    ret = rename("files/temp.bin", "files/library.bin");
     if (ret == 0)
     {
         printf("File renamed successfully");
@@ -309,13 +327,13 @@ void updateLibraryFile(LibraryBook lb)
     {
         printf("Error: unable to rename the file");
     }
-    fclose(libraryFile);
 }
 
-void updateStudentFile(Student s){
+void updateStudentFile(Student s)
+{
     FILE *studentFile, *temp;
-    studentFile = fopen("files\\student.bin", "rb");
-    temp = fopen("files\\temp.bin", "wb");
+    studentFile = fopen("files/student.bin", "rb");
+    temp = fopen("files/temp.bin", "wb");
     Student st;
 
     if (studentFile == NULL || temp == NULL)
@@ -336,7 +354,9 @@ void updateStudentFile(Student s){
         }
     }
 
-    int ret = remove("files\\student.bin");
+    fclose(studentFile);
+    fclose(temp);
+    int ret = remove("files/student.bin");
 
     if (ret == 0)
     {
@@ -347,7 +367,7 @@ void updateStudentFile(Student s){
         printf("Error: unable to delete the file");
     }
 
-    ret = rename("files\\temp.bin", "files\\student.bin");
+    ret = rename("files/temp.bin", "files/student.bin");
     if (ret == 0)
     {
         printf("File renamed successfully");
@@ -356,14 +376,14 @@ void updateStudentFile(Student s){
     {
         printf("Error: unable to rename the file");
     }
-    fclose(studentFile);
 }
 
-void updateBookDetailsToFile(Book b){
+void updateBookDetailsToFile(Book b)
+{
     //replacing
     FILE *bookFile, *temp;
-    bookFile = fopen("files\\book.bin", "rb");
-    temp = fopen("files\\temp.bin", "wb");
+    bookFile = fopen("files/book.bin", "rb");
+    temp = fopen("files/temp.bin", "wb");
     Book ri;
 
     if (bookFile == NULL || temp == NULL)
@@ -383,8 +403,9 @@ void updateBookDetailsToFile(Book b){
             fwrite(&ri, sizeof(Book), 1, bookFile);
         }
     }
-
-    int ret = remove("files\\book.bin");
+    fclose(bookFile);
+    fclose(temp);
+    int ret = remove("files/book.bin");
 
     if (ret == 0)
     {
@@ -395,7 +416,7 @@ void updateBookDetailsToFile(Book b){
         printf("Error: unable to delete the file");
     }
 
-    ret = rename("files\\temp.bin", "files\\book.bin");
+    ret = rename("files/temp.bin", "files/book.bin");
     if (ret == 0)
     {
         printf("File renamed successfully");
@@ -404,14 +425,14 @@ void updateBookDetailsToFile(Book b){
     {
         printf("Error: unable to rename the file");
     }
-    fclose(bookFile);
 }
 
-void deleteBookDetailsFromFile(Book b){
+void deleteBookDetailsFromFile(Book b)
+{
     //removing
     FILE *bookFile, *temp;
-    bookFile = fopen("files\\book.bin", "rb");
-    temp = fopen("files\\temp.bin", "wb");
+    bookFile = fopen("files/book.bin", "rb");
+    temp = fopen("files/temp.bin", "wb");
     Book ri;
 
     if (bookFile == NULL || temp == NULL)
@@ -427,8 +448,9 @@ void deleteBookDetailsFromFile(Book b){
             fwrite(&ri, sizeof(Book), 1, bookFile);
         }
     }
-
-    int ret = remove("files\\book.bin");
+    fclose(bookFile);
+    fclose(temp);
+    int ret = remove("files/book.bin");
 
     if (ret == 0)
     {
@@ -439,7 +461,7 @@ void deleteBookDetailsFromFile(Book b){
         printf("Error: unable to delete the file");
     }
 
-    ret = rename("files\\temp.bin", "files\\book.bin");
+    ret = rename("files/temp.bin", "files/book.bin");
     if (ret == 0)
     {
         printf("File renamed successfully");
@@ -448,8 +470,6 @@ void deleteBookDetailsFromFile(Book b){
     {
         printf("Error: unable to rename the file");
     }
-    fclose(bookFile);
-
 }
 
 /** READING FROM FILES **/
@@ -557,7 +577,27 @@ void getAllCurrentIssues()
     }
     fclose(issueFile);
 }
+Book getBookInfo(int id)
+{
+    FILE *bookFile;
+    Book b;
+    //open book.bin file for reading
+    bookFile = fopen("files/book.bin", "rb");
+    if (bookFile == NULL)
+    {
+        perror("\nError opening the file.\n");
+        exit(1);
+    }
 
+    // read file content till the end of file
+    while (fread(&b, sizeof(Book), 1, bookFile))
+    {
+        if (id == b.id)
+            break;
+    }
+    fclose(bookFile);
+    return b;
+}
 /***********************/
 
 LibraryBook makeNewLibraryBook(Book b)
@@ -576,7 +616,7 @@ LibraryBook makeLibraryBook(Issue i, int libraryTask)
     LibraryBook lb;
 
     //open library.bin file for reading
-    libraryFile = fopen("library.bin", "rb");
+    libraryFile = fopen("files/library.bin", "rb");
     if (libraryFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -594,11 +634,11 @@ LibraryBook makeLibraryBook(Issue i, int libraryTask)
     //now we update the info according to the libraryTask
     switch (libraryTask)
     {
-    case ISSUE:
+    case LISSUE:
         --lb.in;
         ++lb.out;
         break;
-    case RETURN:
+    case LRETURN:
         ++lb.in;
         --lb.out;
         break;
@@ -609,12 +649,13 @@ LibraryBook makeLibraryBook(Issue i, int libraryTask)
     return lb;
 }
 
-Student makeStudentDetails(Issue i, int libraryTask){
+Student makeStudentDetails(Issue i, int libraryTask)
+{
     FILE *studentFile;
     Student s;
 
     //open student.bin file for reading
-    studentFile = fopen("student.bin", "rb");
+    studentFile = fopen("files/student.bin", "rb");
     if (studentFile == NULL)
     {
         perror("\nError opening the file.\n");
@@ -632,10 +673,10 @@ Student makeStudentDetails(Issue i, int libraryTask){
     //now we update the info according to the libraryTask
     switch (libraryTask)
     {
-    case ISSUE:
+    case LISSUE:
         --s.quota;
         break;
-    case RETURN:
+    case LRETURN:
         ++s.quota;
         break;
     default:
@@ -645,6 +686,30 @@ Student makeStudentDetails(Issue i, int libraryTask){
     return s;
 }
 /***********************/
+
+/*************  HELPER FUNCTIONS  ***************/
+int inputBookId(int libraryTask)
+{
+    int id = 0;
+
+    switch (libraryTask)
+    {
+    case LUPDATE:
+        //get the id from the user using some interface for updating the book information
+        printf("\ninput book id to update.");
+        break;
+    case LDELETE:
+        //get the id from the user using some interface for deleting the book information
+        printf("\ninput book id to delete.");
+        break;
+
+    default:
+        break;
+    }
+
+    return id;
+}
+/*************  HELPER FUNCTIONS  ***************/
 
 /** BOOK SEARCH FUNCTIONS **/
 /*
