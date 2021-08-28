@@ -7,16 +7,18 @@
 
 
 /*************** ENUMERATION DECLARATION ***************/
+
+enum bookStatus{
+    BIN,BOUT
+};
 enum bookCondition{
     OLD,NEW
 };
 
-enum bookStatus{
-    IN , OUT
-};
+
 
 enum libraryTask{
-    ISSUE, RETURN
+    LISSUE,LRETURN,LUPDATE,LDELETE
 };
 
 /****************** STRUCTURE CREATION *********************/
@@ -125,6 +127,8 @@ Issue checkReturnConditions();
 void returnBookToFile(Issue i);
 
 /***  MORE FUNCTIONS FOR BOOKS  ****/
+Book getBookInfo(int id);
+int inputBookId(int libraryTask);
 void updateBookInfo();
 void deleteBookInfo();
 void updateBookDetailsToFile(Book b);
@@ -159,3 +163,66 @@ void getAllCurrentIssues();
 */
 void searchBookById(int bId);
 void searchBookByTitle(char *title);
+
+
+/**  FROM FUNCTION.H OF AAYUSH BHANDARI  **/
+/*
+    * these functiuon declarations are done by Aayush Bhandari
+    * these are basically for the UI part and some basic functionality
+    * 
+*/
+void printMessageCenter(const char*);	// print message at the centre
+void heading(int, int);					// heading of entire program
+void headMessage(const char *);			// design heading of each page
+void design(int);				// design of all selection menu
+
+void setxy (int, int);				// function to locate cursor
+void set_print(int, int, const char *, char);			// function to set cursor & display
+int cursor(char ch[], int, int, int);			// move the selection
+
+void home_page();				// home page of program(First page)
+void main_menu();				// The main menu of the program
+
+					// options of main menu
+void add_login();
+void std_login();
+void rules();
+void about();
+
+					// after loging in to respective menu
+void admin_menu();
+void std_menu();
+
+					// in the menu for admin
+void ad_book_handle();				// book handling menu for admin
+void ad_std_handle();			// handle issuers data
+void ad_cred_handle();			// handle credential of both student and admin
+void keep_data();			// sets important data like fines %, no of days to issue books, ...
+
+						// book handling menu for admin
+void add_book();
+void issue();
+void retrn();
+void mfy_book();
+void dlt_book();
+void disp_book();
+void sch_book(int);
+
+						// student handling menu for admin
+void add_std();
+void mfy_std();
+void dlt_std();
+void disp_std();
+void sch_std();
+
+						// credential handling menu for admin
+void add_ad_cred();
+void add_std_cred();
+void dlt_ad_cred();
+void dlt_std_cred();
+void mfy_ad_cred();
+void mfy_std_cred();
+
+
+							// option for student menu
+void change_cred();
