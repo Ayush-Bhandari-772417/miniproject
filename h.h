@@ -15,11 +15,10 @@ enum bookCondition{
     OLD,NEW
 };
 
-
-
 enum libraryTask{
     LISSUE,LRETURN,LUPDATE,LDELETE
 };
+
 
 /****************** STRUCTURE CREATION *********************/
 //a user is a registered memeber of the library
@@ -91,6 +90,10 @@ Student makeStudentDetails(Issue i, int libraryTask);
 void updateStudentFile(Student s);
 
 
+Student getStudentInfo(int id);
+int inputStudentId();
+void getAStudent();
+
 /*
     * this is for registering a new admin
     * addAdmin() : it takes care of reading the new admin information and adding the record to the file
@@ -148,6 +151,8 @@ void updateLibraryFile(LibraryBook lb);
 /*
     * these functions are to be used by the admin
     * these functions will be called from the admin module only
+    * realloc will be used to read the data form the file and 
+    * store into the structure pointer
 */
 void getAllStudents();
 void getAllBooks();
@@ -163,8 +168,24 @@ void getAllCurrentIssues();
 */
 void searchBookById(int bId);
 void searchBookByTitle(char *title);
+void searchBookByAuthor(char *author);
+void searchBookkByCondition(enum bookCondition cdn);
+void searchBookByStatus(enum bookStatus status);
 
+/**  DISPLAY FUNCTIONS HERE   **/
+/*
+    * these function takes the pointer to structure or array of structure\
+    * these fuctions only display the given data
+    * 
+*/
+void displayStudents(Student *std);
+void displayAdmins(Admin* admin);
+void displayBooks(Book* book);
+void displayIssues(Issue* issue);
 
+/**  FROM FUNCTION.H OF AAYUSH BHANDARI  **/
+/**  FROM FUNCTION.H OF AAYUSH BHANDARI  **/
+/**  FROM FUNCTION.H OF AAYUSH BHANDARI  **/
 /**  FROM FUNCTION.H OF AAYUSH BHANDARI  **/
 /*
     * these functiuon declarations are done by Aayush Bhandari
@@ -214,6 +235,9 @@ void mfy_std();
 void dlt_std();
 void disp_std();
 void sch_std();
+
+void disp_all_std();//to display all members
+void disp_a_std();//to display the member with the particular id
 
 						// credential handling menu for admin
 void add_ad_cred();

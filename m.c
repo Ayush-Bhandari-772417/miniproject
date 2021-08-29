@@ -103,6 +103,8 @@ Student inputStudentDetails()
 {
     Student s;
     /* your code to read the new student details */
+    printf("\nWe will input the new student details here.");
+    //also need no validate the student
     return s;
 }
 
@@ -476,7 +478,7 @@ void deleteBookDetailsFromFile(Book b)
 void getAllStudents()
 {
     FILE *studentFile;
-    Student s;
+    Student s, *stds;
 
     //open student.bin file for reading
     studentFile = fopen("files/student.bin", "rb");
@@ -487,16 +489,39 @@ void getAllStudents()
     }
 
     // read file content till the end of file
-    while (fread(&s, sizeof(Student), 1, studentFile))
     {
-        /* your code to add the data of file to a array or to print the data*/
+        stds = (Student *)calloc(0, sizeof(Student));
+        int i = 0;
+        size_t n = 0;
+        Student *temp;
+        while (fread(&s, sizeof(Student), 1, studentFile))
+        {
+
+            //storing the student details form the file to a student poiner
+            //this needs some optimization, may be later
+            n = (&stds)[1] - stds;
+            temp = (Student *)realloc(stds, (n + 1) * sizeof(Student));
+            if (!temp)
+            {
+                //could not allcate memory successfully
+            }
+            else
+            {
+                stds = temp;
+            }
+            stds[i++] = s;
+        }
+        displayStudents(stds); //passing all the students to print
+        free(stds);
+        free(temp);
     }
+
     fclose(studentFile);
 }
 void getAllAdmins()
 {
     FILE *adminFile;
-    Admin a;
+    Admin a, *admin;
 
     //open admin.bin file for reading
     adminFile = fopen("files/admin.bin", "rb");
@@ -507,16 +532,39 @@ void getAllAdmins()
     }
 
     // read file content till the end of file
-    while (fread(&a, sizeof(Admin), 1, adminFile))
     {
-        /* your code to add the data of file to a array or to print the data*/
+        admin = (Admin *)calloc(0, sizeof(Admin));
+        int i = 0;
+        size_t n = 0;
+        Admin *temp;
+        while (fread(&a, sizeof(Admin), 1, adminFile))
+        {
+
+            //storing the admin details form the file to a admin poiner
+            //this needs some optimization, may be later
+            n = (&admin)[1] - admin;
+            temp = (Admin *)realloc(admin, (n + 1) * sizeof(Admin));
+            if (!temp)
+            {
+                //could not allcate memory successfully
+            }
+            else
+            {
+                admin = temp;
+            }
+            admin[i++] = a;
+        }
+        displayAdmins(admin); //passing all the admins to print
+        free(admin);
+        free(temp);
     }
+
     fclose(adminFile);
 }
 void getAllBooks()
 {
     FILE *bookFile;
-    Book b;
+    Book b, *book;
 
     //open book.bin file for reading
     bookFile = fopen("files/book.bin", "rb");
@@ -527,16 +575,40 @@ void getAllBooks()
     }
 
     // read file content till the end of file
-    while (fread(&b, sizeof(Book), 1, bookFile))
+
     {
-        /* your code to add the data of file to a array or to print the data*/
+        book = (Book *)calloc(0, sizeof(Book));
+        int i = 0;
+        size_t n = 0;
+        Book *temp;
+        while (fread(&b, sizeof(Book), 1, bookFile))
+        {
+
+            //storing the book details form the file to a admin poiner
+            //this needs some optimization, may be later
+            n = (&book)[1] - book;
+            temp = (Book *)realloc(book, (n + 1) * sizeof(Book));
+            if (!temp)
+            {
+                //could not allcate memory successfully
+            }
+            else
+            {
+                book = temp;
+            }
+            book[i++] = b;
+        }
+        displayBooks(book); //passing all the books to print
+        free(book);
+        free(temp);
     }
+
     fclose(bookFile);
 }
 void getAllIssues()
 {
     FILE *issueFile;
-    Issue i;
+    Issue is, *issue;
 
     //open issue.bin file for reading
     issueFile = fopen("files/issue.bin", "rb");
@@ -547,9 +619,31 @@ void getAllIssues()
     }
 
     // read file content till the end of file
-    while (fread(&i, sizeof(Issue), 1, issueFile))
     {
-        /* your code to add the data of file to a array or to print the data*/
+        issue = (Issue *)calloc(0, sizeof(Issue));
+        int i = 0;
+        size_t n = 0;
+        Issue *temp;
+        while (fread(&is, sizeof(Issue), 1, issueFile))
+        {
+
+            //storing the issue details form the file to a admin poiner
+            //this needs some optimization, may be later
+            n = (&issue)[1] - issue;
+            temp = (Issue *)realloc(issue, (n + 1) * sizeof(Issue));
+            if (!temp)
+            {
+                //could not allcate memory successfully
+            }
+            else
+            {
+                issue = temp;
+            }
+            issue[i++] = is;
+        }
+        displayIssues(issue); //passing all the issues to print
+        free(issue);
+        free(temp);
     }
 
     fclose(issueFile);
@@ -557,7 +651,7 @@ void getAllIssues()
 void getAllCurrentIssues()
 {
     FILE *issueFile;
-    Issue i;
+    Issue is,*issue;
 
     //open issue.bin file for reading
     issueFile = fopen("files/issue.bin", "rb");
@@ -568,13 +662,40 @@ void getAllCurrentIssues()
     }
 
     // read file content till the end of file
-    while (fread(&i, sizeof(Issue), 1, issueFile))
+   
+
     {
-        if (i.returnedDate == NULL)
+        issue = (Issue *)calloc(0, sizeof(Issue));
+        int i = 0;
+        size_t n = 0;
+        Issue *temp;
+        while (fread(&is, sizeof(Issue), 1, issueFile))
         {
-            /* your code to add the data of file to a array or to print the data*/
+
+            //storing the issue details form the file to a issue poiner
+            //this needs some optimization, may be later
+
+            if (is.returnedDate == NULL)//current issues ; open issues don't have returned dates
+            {
+                /* your code to add the data of file to a array or to print the data*/
+                n = (&issue)[1] - issue;
+                temp = (Issue *)realloc(issue, (n + 1) * sizeof(Issue));
+                if (!temp)
+                {
+                    //could not allcate memory successfully
+                }
+                else
+                {
+                    issue = temp;
+                }
+                issue[i++] = is;
+            }
         }
+        displayIssues(issue); //passing all the issues to print
+        free(issue);
+        free(temp);
     }
+
     fclose(issueFile);
 }
 Book getBookInfo(int id)
@@ -598,6 +719,37 @@ Book getBookInfo(int id)
     fclose(bookFile);
     return b;
 }
+
+Student getStudentInfo(int id)
+{
+    FILE *studentFile;
+    Student s;
+    //open student.bin file for reading
+    studentFile = fopen("files/student.bin", "rb");
+    if (studentFile == NULL)
+    {
+        perror("\nError opening the file.\n");
+        exit(1);
+    }
+
+    // read file content till the end of file
+    while (fread(&s, sizeof(Student), 1, studentFile))
+    {
+        if (id == s.id)
+            break;
+    }
+    fclose(studentFile);
+    return s;
+}
+
+void getAStudent()
+{
+    int id = inputStudentId();
+    Student s = getStudentInfo(id);
+    //then display the information in the particular format
+    printf("\nDisplay the member details in a format here.");
+}
+
 /***********************/
 
 LibraryBook makeNewLibraryBook(Book b)
@@ -709,7 +861,36 @@ int inputBookId(int libraryTask)
 
     return id;
 }
+
+int inputStudentId()
+{
+    int id = 0;
+    printf("\nWe input student id to search the information of the student.");
+    return id;
+}
 /*************  HELPER FUNCTIONS  ***************/
+
+/*********************  DISPLAY FUNCTIONS HERE  ********************/
+void displayStudents(Student *stds)
+{
+    /* your code here to display the student informations */
+    printf("\nWe display the information of all the members here.");
+}
+
+void displayBooks(Book *books)
+{
+    /* your code here to display the book informations */
+    printf("\nWe display the information of the books here.");
+}
+
+void displayAdmins(Admin* admins){
+    printf("\nWe display the information of the admins here.");
+}
+void displayIssues(Issue* issues){
+printf("\nWe display all the current open issues here.");
+}
+
+/*********************  DISPLAY FUNCTIONS HERE  ********************/
 
 /** BOOK SEARCH FUNCTIONS **/
 /*
