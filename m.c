@@ -29,12 +29,18 @@
 void addStudent()
 {
     Student s = inputStudentDetails();
+    /*     validate the student input info and redirect to the required function */
+
+
     addStudentToFile(s);
 }
 //Add a new admin
 void addAdmin()
 {
     Admin a = inputAdminDetails();
+        /*     validate the student input info and redirect to the required function */
+
+
     addAdminToFile(a);
 }
 
@@ -42,6 +48,9 @@ void addAdmin()
 void addBook()
 {
     Book b = inputBookDetails();
+    /*     validate the student input info and redirect to the required function */
+
+
     addBookToFile(b);
     /*update the status to the library*/
     LibraryBook lb = makeNewLibraryBook(b);
@@ -51,6 +60,8 @@ void addBook()
 void issueBook()
 {
     Issue i = inputIssueDetails();
+    /*     validate the student input info and redirect to the required function */
+
     issueBookToFile(i);
     /*update the book status to the library*/
     LibraryBook lb = makeLibraryBook(i, LISSUE);
@@ -64,6 +75,8 @@ void issueBook()
 void returnBook()
 {
     Issue i = checkReturnConditions();
+    /*     validate the student input info and redirect to the required function */
+
     returnBookToFile(i);
     /*update the book status to the library*/
     LibraryBook lb = makeLibraryBook(i, LRETURN);
@@ -81,6 +94,8 @@ void updateBookInfo()
     //need to decide weither to show the old data or not
     //first show the old details
     int id = inputBookId(LUPDATE);
+    /*     validate the student input info and redirect to the required function */
+
     b = getBookInfo(id);
     //display or no the details of this book
     //then input the new details of the book
@@ -98,46 +113,7 @@ void deleteBookInfo()
     deleteBookDetailsFromFile(b);
 }
 
-/***************** FUNCTION TO READ NEW RECORD DETAILS *******************/
-Student inputStudentDetails()
-{
-    Student s;
-    /* your code to read the new student details */
-    printf("\nWe will input the new student details here.");
-    //also need no validate the student
-    return s;
-}
 
-Admin inputAdminDetails()
-{
-    Admin a;
-    /* your code to read the new admin details */
-    return a;
-}
-
-Book inputBookDetails()
-{
-    Book b;
-    /* your code to read the details of the new book */
-    printf("\nWe will input the book details here.");
-    return b;
-}
-
-Issue inputIssueDetails()
-{
-    Issue i;
-    /* read details of the issue and do validation*/
-    printf("\nWe will input the details for issue and validate here.");
-    return i;
-}
-
-Issue checkReturnConditions()
-{
-    Issue i;
-    /*do all the return condition validation*/
-    printf("\nHere is the validations while returning the book.");
-    return i;
-}
 
 /**************** FUNCTIONS FOR FILE HANDLING *******************/
 

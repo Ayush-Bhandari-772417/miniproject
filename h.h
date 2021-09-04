@@ -183,6 +183,12 @@ void displayAdmins(Admin* admin);
 void displayBooks(Book* book);
 void displayIssues(Issue* issue);
 
+
+
+
+
+
+
 /**  FROM FUNCTION.H OF AAYUSH BHANDARI  **/
 /**  FROM FUNCTION.H OF AAYUSH BHANDARI  **/
 /**  FROM FUNCTION.H OF AAYUSH BHANDARI  **/
