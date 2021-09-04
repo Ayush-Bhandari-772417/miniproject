@@ -809,6 +809,47 @@ Issue inputIssueDetails()
     Issue i;
     /* read details of the issue and do validation*/
     printf("\nWe will input the details for issue and validate here.");
+
+	int x, y;
+    char chc[1] = {' '}, choice;
+    headMessage("Issuing a book");
+    design(29);
+	x=19;			y=15;
+	setxy(0,y);
+	
+	printMessageCenter("Enter Issue's information");
+	
+	set_print(x, y+4, "ID \t :- ______________________", chc[0]);
+	set_print(x, y+6, "UserID \t :- ______________________", chc[0]);
+	set_print(x, y+8, "BookID \t :- ______________________", chc[0]);
+	set_print(x, y+10, "IssueDate \t :- ______________________", chc[0]);
+	set_print(x, y+12, "ReturnDate  :- ______________________", chc[0]);
+	set_print(x, y+14, "ReturnedDate:- ______________________", chc[0]);
+
+
+	setxy(x+17,y+4);
+	scanf("%d", &i.iId);
+	fseek(stdin, 0, SEEK_END);
+
+	setxy(x+17,y+6);
+	scanf("%d", &i.uId);
+	fseek(stdin, 0, SEEK_END);
+
+	setxy(x+17,y+8);
+	scanf("%d", &i.bId);
+	fseek(stdin, 0, SEEK_END);
+	
+	setxy(x+17,y+10);
+	scanf("%[^\n]s", i.issueDate);
+	fseek(stdin, 0, SEEK_END);
+	
+	setxy(x+17,y+12);
+	scanf("%[^\n]s", i.returnDate);
+	fseek(stdin, 0, SEEK_END);
+	
+	setxy(x+17,y+14);
+	scanf("%[^\n]s", i.returnedDate);
+	fseek(stdin, 0, SEEK_END);
     return i;
 }
 
